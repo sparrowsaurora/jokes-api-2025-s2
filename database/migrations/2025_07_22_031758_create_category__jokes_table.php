@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('category_joke', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId(Joke::class)->constrained();
-            $table->foreignId(Category::class)->constrained();
+            $table->foreignIdFor(Joke::class)->constrained();
+            $table->foreignIdFor(Category::class)->constrained();
 
             $table->timestamps();
         });

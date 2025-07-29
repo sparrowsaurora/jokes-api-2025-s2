@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
@@ -21,7 +22,37 @@ Route::middleware(['auth', 'verified'])
         Route::get('/', [AdminController::class, 'index'])
             ->name('index');
 
-        Route::get('users', [AdminController::class, 'users'])->name('users');
+        /* Users Admin Routes ----------------------------------------------------------- */
+        Route::get('users', [AdminController::class, 'users'])
+            ->name('users.index');
+
+        /* Categories Admin Routes ------------------------------------------------------ */
+        Route::get('categories/trash', [AdminCategoryController::class, 'trash'])
+            ->name('categories.trash');
+
+        Route::delete('categories/trash/empty', [AdminCategoryController::class, 'removeAll'])
+            ->name('categories.trash.remove.all');
+
+        Route::post('categories/trash/recover', [AdminCategoryController::class, 'recoverAll'])
+            ->name('categories.trash.recover.all');
+
+        Route::delete('categories/trash/{id}/remove', [AdminCategoryController::class, 'removeOne'])
+            ->name('categories.trash.remove.one');
+
+        Route::post('categories/trash/{id}/recover', [AdminCategoryController::class, 'recoverOne'])
+            ->name('categories.trash.recover.one');
+
+        /** Stop people trying to "GET" admin/categories/trash/1234/delete or similar */
+        Route::get('categories/trash/{id}/{method}', [AdminCategoryController::class, 'trash']);
+
+        Route::resource("categories", AdminCategoryController::class);
+
+        Route::post('categories/{category}/delete', [AdminCategoryController::class, 'delete'])
+            ->name('categories.delete');
+
+        Route::get('categories/{category}/delete', function () {
+            return redirect()->route('admin.categories.index');
+        });
     });
 
 Route::middleware('auth')->group(function () {
