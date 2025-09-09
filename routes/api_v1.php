@@ -20,6 +20,10 @@ Route::get('profile', [AuthControllerV1::class, 'profile'])
 Route::post('logout', [AuthControllerV1::class, 'logout'])
     ->middleware(['auth:sanctum',]);
 
-Route::get('user', static function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+Route::get('user',  [AuthControllerV1::class, 'profile'])
+    ->middleware(['auth:sanctum',]);
+
+//Route::get('user', static function (Request $request) {
+//    return $request->user();
+//})->middleware('auth:sanctum');
+//
